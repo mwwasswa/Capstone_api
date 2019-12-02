@@ -1,9 +1,10 @@
-class BlogsController < ApplicationController
-  before_action :set_blog, only: [:show, :update, :destroy]
+class BlogsController < ProtectedController
+  before_action :set_blog, only: %i[show update destroy]
 
   # GET /blogs
   def index
-    @blogs = Blog.all
+    # @blogs = Blog.all (shows all team, regardless of them belonging on current user)
+    @blogs = current_user.blogs
 
     render json: @blogs
   end
@@ -15,7 +16,8 @@ class BlogsController < ApplicationController
 
   # POST /blogs
   def create
-    @blog = Blog.new(blog_params)
+    # @blog = Blog.new(blog_params) (can only create in current user's account)
+    @blog = current_user.blogs.build(blog_params)
 
     if @blog.save
       render json: @blog, status: :created, location: @blog
@@ -41,11 +43,12 @@ class BlogsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_blog
-      @blog = Blog.find(params[:id])
+      # @blog = Blog.find(params[:id]) (only delete what the user owns)
+      @blog = current_user.blogs.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
     def blog_params
-      params.require(:blog).permit(:category, :title, :content)
+      params.require(:blog).permit(:category, :title, :content, :user_id)
     end
 end

@@ -9,8 +9,7 @@ curl "http://localhost:4741/blogs/${ID}" \
     "blog": {
       "category": "'"${CATEGORY}"'",
       "title": "'"${TITLE}"'",
-      "content": "'"${CONTENT}"'",
-      "user_id": "'"${ID}"'"
+      "content": "'"${CONTENT}"'"
     }
   }'
 

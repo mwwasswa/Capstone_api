@@ -1,10 +1,10 @@
-class BlogsController < ProtectedController
+class BlogsController < OpenReadController
   before_action :set_blog, only: %i[show update destroy]
 
   # GET /blogs
   def index
-    # @blogs = Blog.all (shows all team, regardless of them belonging on current user)
-    @blogs = current_user.blogs
+    @blogs = Blog.all
+    # @blogs = current_user.blogs.all
 
     render json: @blogs
   end
@@ -43,8 +43,8 @@ class BlogsController < ProtectedController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_blog
-      # @blog = Blog.find(params[:id]) (only delete what the user owns)
-      @blog = current_user.blogs.find(params[:id])
+      @blog = Blog.find(params[:id])
+      # @blog = current_user.blogs.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

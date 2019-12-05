@@ -1,5 +1,5 @@
 class BlogsController < OpenReadController
-  before_action :set_blog, only: %i[show update destroy]
+  before_action :set_blog, only: %i[show]
 
   # GET /blogs
   def index
@@ -28,6 +28,7 @@ class BlogsController < OpenReadController
 
   # PATCH/PUT /blogs/1
   def update
+    @blog = current_user.blogs.find(params[:id])
     if @blog.update(blog_params)
       render json: @blog
     else
@@ -37,6 +38,7 @@ class BlogsController < OpenReadController
 
   # DELETE /blogs/1
   def destroy
+    @blog = current_user.blogs.find(params[:id])
     @blog.destroy
   end
 
